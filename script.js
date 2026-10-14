@@ -405,3 +405,80 @@ document.getElementById("signInBtn").addEventListener("click", async () => {
         authStatus.textContent = error.message;
     }
 });
+
+// NTk3 — Authentication diagnostics and button handlers
+
+(() => {
+    const signInButton = document.getElementById("signInBtn");
+    const signUpButton = document.getElementById("signUpBtn");
+    const emailInput = document.getElementById("authEmail");
+    const passwordInput = document.getElementById("authPassword");
+    const status = document.getElementById("authStatus");
+
+    if (!signInButton || !signUpButton || !emailInput ||
+        !passwordInput || !status) {
+        console.error("NTk3: Authentication elements are missing.");
+        return;
+    }
+
+    if (typeof supabaseClient === "undefined") {
+        status.textContent = "Connection error: Supabase is not configured.";
+        console.error("NTk3: supabaseClient is not defined.");
+        return;
+    }
+
+    async function authenticate(mode) {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        if (!email || !password) {
+            status.textContent = "Please enter your email and password.";
+            return;
+        }
+
+        status.textContent = mode === "signin"
+            ? "Signing in..."
+            : "Creating your account...";
+
+        signInButton.disabled = true;
+        signUpButton.disabled = true;
+
+        try {
+            const result = mode === "signin"
+                ? await supabaseClient.auth.signInWithPassword({
+                    email,
+                    password
+                })
+                : await supabaseClient.auth.signUp({
+                    email,
+                    password
+                });
+
+            if (result.error) throw result.error;
+
+            status.textContent = mode === "signin"
+                ? "Signed in successfully!"
+                : result.data.session
+                    ? "Account created successfully!"
+                    : "Check your email to confirm your account.";
+
+            console.log("NTk3 authentication response:", {
+                mode,
+                success: !result.error,
+                hasSession: Boolean(result.data.session)
+            });
+
+        } catch (error) {
+            status.textContent = error.message || "Authentication failed.";
+            console.error("NTk3 authentication error:", error);
+        } finally {
+            signInButton.disabled = false;
+            signUpButton.disabled = false;
+        }
+    }
+
+    signInButton.addEventListener("click", () => authenticate("signin"));
+    signUpButton.addEventListener("click", () => authenticate("signup"));
+
+    console.log("NTk3: Authentication buttons connected.");
+})();
