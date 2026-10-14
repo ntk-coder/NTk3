@@ -158,13 +158,43 @@
         </div>
 
     </main>
+<!-- NTk3 Authentication -->
+<section class="auth-panel panel" id="authPanel">
+    <div class="auth-heading">
+        <h2>Welcome to <span>NTk3</span></h2>
+        <p>Sign in to access your private conversations.</p>
+    </div>
 
+    <label for="authEmail">EMAIL ADDRESS</label>
+    <input
+        type="email"
+        id="authEmail"
+        placeholder="you@example.com"
+        autocomplete="email"
+    >
+
+    <label for="authPassword">PASSWORD</label>
+    <input
+        type="password"
+        id="authPassword"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+    >
+
+    <div class="auth-actions">
+        <button class="primary-btn" id="signInBtn">Sign In</button>
+        <button class="secondary-btn" id="signUpBtn">Create Account</button>
+    </div>
+
+    <p id="authStatus" role="status" aria-live="polite"></p>
+</section>
     <footer>
         <span class="footer-logo">NTk<span>3</span></span>
         <span class="footer-divider">•</span>
         Private communication, simplified.
     </footer>
 
-    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
 </body>
 </html>

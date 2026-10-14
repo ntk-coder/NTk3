@@ -326,3 +326,82 @@ document.getElementById("themeBtn").addEventListener("click", () => {
     document.querySelector('meta[name="theme-color"]').content =
         isLight ? "#f3f6ff" : "#080b12";
 });
+
+// NTk3 — Supabase configuration
+const SUPABASE_URL = "https://ijmgnajbswmujtkrtfnb.supabase.co/rest/v1/";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Et7wT2yGdkqzPTLJPjc2Bw_CCFQtKyv";
+
+// NTk3 — Supabase configuration
+const SUPABASE_URL = "https://ijmgnajbswmujtkrtfnb.supabase.co/rest/v1/";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Et7wT2yGdkqzPTLJPjc2Bw_CCFQtKyv";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+// NTk3 Authentication
+
+const authEmail = document.getElementById("authEmail");
+const authPassword = document.getElementById("authPassword");
+const authStatus = document.getElementById("authStatus");
+const authPanel = document.getElementById("authPanel");
+
+document.getElementById("signUpBtn").addEventListener("click", async () => {
+    const email = authEmail.value.trim();
+    const password = authPassword.value;
+
+    if (!email || !password) {
+        authStatus.textContent = "Enter your email and password.";
+        return;
+    }
+
+    if (password.length < 12) {
+        authStatus.textContent =
+            "Use a password of at least 12 characters.";
+        return;
+    }
+
+    authStatus.textContent = "Creating your account...";
+
+    try {
+        const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password
+        });
+
+        if (error) throw error;
+
+        authStatus.textContent = data.session
+            ? "Account created. You're signed in!"
+            : "Account created. Check your email to confirm registration.";
+    } catch (error) {
+        authStatus.textContent = error.message;
+    }
+});
+
+document.getElementById("signInBtn").addEventListener("click", async () => {
+    const email = authEmail.value.trim();
+    const password = authPassword.value;
+
+    if (!email || !password) {
+        authStatus.textContent = "Enter your email and password.";
+        return;
+    }
+
+    authStatus.textContent = "Signing in...";
+
+    try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (error) throw error;
+
+        authStatus.textContent = "Signed in successfully!";
+        console.log("NTk3 authentication successful.");
+    } catch (error) {
+        authStatus.textContent = error.message;
+    }
+});
