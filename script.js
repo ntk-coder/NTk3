@@ -330,7 +330,7 @@ document.getElementById("themeBtn").addEventListener("click", () => {
 
 
 // NTk3 — Supabase configuration
-const SUPABASE_URL = "https://ijmgnajbswmujtkrtfnb.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://ijmgnajbswmujtkrtfnb.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Et7wT2yGdkqzPTLJPjc2Bw_CCFQtKyv";
 
 const supabaseClient = window.supabase.createClient(
