@@ -327,9 +327,7 @@ document.getElementById("themeBtn").addEventListener("click", () => {
         isLight ? "#f3f6ff" : "#080b12";
 });
 
-// NTk3 — Supabase configuration
-const SUPABASE_URL = "https://ijmgnajbswmujtkrtfnb.supabase.co/rest/v1/";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Et7wT2yGdkqzPTLJPjc2Bw_CCFQtKyv";
+
 
 // NTk3 — Supabase configuration
 const SUPABASE_URL = "https://ijmgnajbswmujtkrtfnb.supabase.co/rest/v1/";
