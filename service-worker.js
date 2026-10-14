@@ -6,7 +6,9 @@ const APP_FILES = [
     "./style.css",
     "./script.js",
     "./manifest.json",
-    "./icon.png"
+    "./icon.png",
+    "./icon-192.png",
+    "./icon-512.png"
 ];
 
 // Install and cache the application files

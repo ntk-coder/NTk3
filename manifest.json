@@ -2,25 +2,21 @@
   "id": "/NTk3/",
   "name": "NTk3 - Private Communication",
   "short_name": "NTk3",
-  "description": "Private offline message encryption",
   "start_url": "/NTk3/index.html",
   "scope": "/NTk3/",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#080b12",
   "theme_color": "#080b12",
   "icons": [
     {
       "src": "/NTk3/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
       "src": "/NTk3/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     }
   ]
 }
