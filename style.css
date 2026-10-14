@@ -715,49 +715,200 @@ body.light .footer-logo {
     }
 }
 
+/* ===== NTk3 Premium Authentication ===== */
+
 .auth-panel {
-    max-width: 480px;
-    margin: 0 auto 24px;
-    padding: 25px;
+    position: relative;
+    width: min(100%, 420px);
+    margin: 35px auto;
+    padding: 34px;
+    overflow: hidden;
+
+    background: linear-gradient(
+        145deg,
+        rgba(21, 28, 46, 0.98),
+        rgba(12, 17, 30, 0.98)
+    );
+
+    border: 1px solid rgba(119, 137, 255, 0.22);
+    border-radius: 22px;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.28),
+        0 0 45px rgba(93, 95, 255, 0.05);
 }
 
+/* Subtle gradient along the top edge */
+.auth-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 15%;
+    width: 70%;
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #679cff,
+        #8a6aff,
+        transparent
+    );
+}
+
+/* Header */
 .auth-heading {
-    margin-bottom: 25px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-brand-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 20px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid rgba(123, 132, 255, 0.4);
+    border-radius: 17px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(72, 112, 255, 0.2),
+        rgba(119, 78, 255, 0.15)
+    );
+
+    color: #aebcff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 23px;
+    font-weight: 700;
+
+    box-shadow: 0 0 30px rgba(93, 95, 255, 0.12);
 }
 
 .auth-heading h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 23px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 27px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    color: #f1f4ff;
 }
 
 .auth-heading h2 span {
-    color: #8580ff;
+    background: linear-gradient(100deg, #65b2ff, #9180ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .auth-heading p {
-    color: var(--muted);
+    margin-top: 10px;
+    color: #8c9ab8;
     font-size: 13px;
-    margin-top: 8px;
+    line-height: 1.7;
 }
 
+/* Labels */
+.auth-panel label {
+    margin: 20px 0 9px;
+    color: #b7c3df;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+/* Input fields */
+.auth-panel input {
+    width: 100%;
+    height: 51px;
+    padding: 0 15px;
+
+    background: #0b101b;
+    border: 1px solid #293650;
+    border-radius: 11px;
+
+    color: #f1f4ff;
+    font-family: "DM Sans", sans-serif;
+    font-size: 13px;
+
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-panel input::placeholder {
+    color: #65738f;
+}
+
+.auth-panel input:focus {
+    outline: none;
+    border-color: #7785ff;
+    box-shadow: 0 0 0 4px rgba(103, 126, 255, 0.09);
+}
+
+/* Buttons */
 .auth-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 20px;
+    grid-template-columns: 1fr;
+    gap: 11px;
+    margin-top: 25px;
 }
 
 .auth-actions .primary-btn {
-    margin-top: 0;
+    min-height: 49px;
+    margin: 0;
+    border-radius: 11px;
+
+    background: linear-gradient(105deg, #4e91ff, #7049f5);
+    border: 1px solid rgba(148, 151, 255, 0.6);
+
+    color: white;
+    font-size: 13px;
+
+    box-shadow: 0 8px 24px rgba(79, 91, 241, 0.17);
+}
+
+.auth-actions .primary-btn:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
 }
 
 .auth-actions .secondary-btn {
-    margin-top: 0;
+    min-height: 47px;
+    margin: 0;
+
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid #293650;
+    border-radius: 11px;
+
+    color: #c0c9e3;
+    font-size: 12px;
 }
 
+.auth-actions .secondary-btn:hover {
+    background: rgba(114, 126, 255, 0.08);
+    border-color: #505b86;
+}
+
+/* Authentication feedback */
 #authStatus {
-    margin-top: 15px;
-    color: var(--muted);
+    min-height: 18px;
+    margin-top: 17px;
+
+    color: #8c9ab8;
     font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
     overflow-wrap: anywhere;
+}
+
+/* Small screens */
+@media (max-width: 450px) {
+    .auth-panel {
+        padding: 26px 21px;
+        border-radius: 18px;
+    }
+
+    .auth-heading h2 {
+        font-size: 24px;
+    }
 }
