@@ -404,79 +404,134 @@ document.getElementById("signInBtn").addEventListener("click", async () => {
     }
 });
 
-// NTk3 — Authentication diagnostics and button handlers
+// NTk3 — Authentication and session manager
 
-(() => {
-    const signInButton = document.getElementById("signInBtn");
-    const signUpButton = document.getElementById("signUpBtn");
-    const emailInput = document.getElementById("authEmail");
-    const passwordInput = document.getElementById("authPassword");
-    const status = document.getElementById("authStatus");
+const authPanel = document.getElementById("authPanel");
+const authEmail = document.getElementById("authEmail");
+const authPassword = document.getElementById("authPassword");
+const authStatus = document.getElementById("authStatus");
 
-    if (!signInButton || !signUpButton || !emailInput ||
-        !passwordInput || !status) {
-        console.error("NTk3: Authentication elements are missing.");
-        return;
-    }
+const appContainer = document.querySelector("main.container");
 
-    if (typeof supabaseClient === "undefined") {
-        status.textContent = "Connection error: Supabase is not configured.";
-        console.error("NTk3: supabaseClient is not defined.");
-        return;
-    }
+const signInButton = document.getElementById("signInBtn");
+const signUpButton = document.getElementById("signUpBtn");
 
-    async function authenticate(mode) {
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
+const originalAppContent = Array.from(appContainer.children)
+    .filter(element => element.id !== "authPanel");
 
-        if (!email || !password) {
-            status.textContent = "Please enter your email and password.";
+const sessionBar = document.createElement("div");
+sessionBar.className = "session-bar";
+sessionBar.hidden = true;
+
+sessionBar.innerHTML = `
+    <span class="session-label">
+        <span class="status-dot"></span>
+        Signed in to NTk3
+    </span>
+    <button type="button" id="signOutBtn">Sign out</button>
+`;
+
+authPanel.after(sessionBar);
+
+function showSignedInState(user) {
+    authPanel.hidden = true;
+
+    originalAppContent.forEach(element => {
+        element.hidden = false;
+    });
+
+    sessionBar.hidden = false;
+
+    sessionBar.querySelector(".session-label").textContent =
+        `Signed in: ${user.email || "NTk3 user"}`;
+
+    document.getElementById("signOutBtn").onclick = async () => {
+        const { error } = await supabaseClient.auth.signOut();
+
+        if (error) {
+            authStatus.textContent = error.message;
+            authPanel.hidden = false;
             return;
         }
 
-        status.textContent = mode === "signin"
-            ? "Signing in..."
-            : "Creating your account...";
+        showSignedOutState();
+    };
+}
 
-        signInButton.disabled = true;
-        signUpButton.disabled = true;
+function showSignedOutState() {
+    authPanel.hidden = false;
+    sessionBar.hidden = true;
 
-        try {
-            const result = mode === "signin"
-                ? await supabaseClient.auth.signInWithPassword({
-                    email,
-                    password
-                })
-                : await supabaseClient.auth.signUp({
-                    email,
-                    password
-                });
+    originalAppContent.forEach(element => {
+        element.hidden = true;
+    });
+}
 
-            if (result.error) throw result.error;
+async function authenticate(mode) {
+    const email = authEmail.value.trim();
+    const password = authPassword.value;
 
-            status.textContent = mode === "signin"
-                ? "Signed in successfully!"
-                : result.data.session
-                    ? "Account created successfully!"
-                    : "Check your email to confirm your account.";
-
-            console.log("NTk3 authentication response:", {
-                mode,
-                success: !result.error,
-                hasSession: Boolean(result.data.session)
-            });
-
-        } catch (error) {
-            status.textContent = error.message || "Authentication failed.";
-            console.error("NTk3 authentication error:", error);
-        } finally {
-            signInButton.disabled = false;
-            signUpButton.disabled = false;
-        }
+    if (!email || !password) {
+        authStatus.textContent = "Enter your email and password.";
+        return;
     }
 
-    signInButton.addEventListener("click", () => authenticate("signin"));
-    signUpButton.addEventListener("click", () => authenticate("signup"));
+    signInButton.disabled = true;
+    signUpButton.disabled = true;
 
-    console.log("NTk3: Authentication buttons connected.");
+    authStatus.textContent =
+        mode === "signin" ? "Signing in..." : "Creating account...";
+
+    try {
+        const result = mode === "signin"
+            ? await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            })
+            : await supabaseClient.auth.signUp({
+                email,
+                password
+            });
+
+        if (result.error) throw result.error;
+
+        if (result.data.session) {
+            authStatus.textContent = "Welcome to NTk3!";
+            showSignedInState(result.data.user);
+        } else {
+            authStatus.textContent =
+                "Check your email to confirm your account, then sign in.";
+        }
+    } catch (error) {
+        authStatus.textContent = error.message;
+    } finally {
+        signInButton.disabled = false;
+        signUpButton.disabled = false;
+    }
+}
+
+signInButton.addEventListener("click", () => authenticate("signin"));
+signUpButton.addEventListener("click", () => authenticate("signup"));
+
+supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (session) {
+        showSignedInState(session.user);
+    } else {
+        showSignedOutState();
+    }
+});
+
+(async () => {
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (error) {
+        authStatus.textContent = "Unable to restore your session.";
+        return;
+    }
+
+    if (data.session) {
+        showSignedInState(data.session.user);
+    } else {
+        showSignedOutState();
+    }
 })();
