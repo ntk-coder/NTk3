@@ -406,28 +406,22 @@ document.getElementById("signInBtn").addEventListener("click", async () => {
 
 // NTk3 — Authentication and session manager
 
-const authPanel = document.getElementById("authPanel");
 const authEmail = document.getElementById("authEmail");
 const authPassword = document.getElementById("authPassword");
 const authStatus = document.getElementById("authStatus");
+const authPanel = document.getElementById("authPanel");
 
 const appContainer = document.querySelector("main.container");
-
 const signInButton = document.getElementById("signInBtn");
 const signUpButton = document.getElementById("signUpBtn");
 
-const originalAppContent = Array.from(appContainer.children)
-    .filter(element => element.id !== "authPanel");
+const originalAppContent = Array.from(appContainer.children);
 
 const sessionBar = document.createElement("div");
 sessionBar.className = "session-bar";
 sessionBar.hidden = true;
-
 sessionBar.innerHTML = `
-    <span class="session-label">
-        <span class="status-dot"></span>
-        Signed in to NTk3
-    </span>
+    <span class="session-label"></span>
     <button type="button" id="signOutBtn">Sign out</button>
 `;
 
@@ -435,11 +429,7 @@ authPanel.after(sessionBar);
 
 function showSignedInState(user) {
     authPanel.hidden = true;
-
-    originalAppContent.forEach(element => {
-        element.hidden = false;
-    });
-
+    originalAppContent.forEach(el => el.hidden = false);
     sessionBar.hidden = false;
 
     sessionBar.querySelector(".session-label").textContent =
@@ -450,21 +440,14 @@ function showSignedInState(user) {
 
         if (error) {
             authStatus.textContent = error.message;
-            authPanel.hidden = false;
-            return;
         }
-
-        showSignedOutState();
     };
 }
 
 function showSignedOutState() {
     authPanel.hidden = false;
     sessionBar.hidden = true;
-
-    originalAppContent.forEach(element => {
-        element.hidden = true;
-    });
+    originalAppContent.forEach(el => el.hidden = true);
 }
 
 async function authenticate(mode) {
@@ -478,26 +461,20 @@ async function authenticate(mode) {
 
     signInButton.disabled = true;
     signUpButton.disabled = true;
-
-    authStatus.textContent =
-        mode === "signin" ? "Signing in..." : "Creating account...";
+    authStatus.textContent = mode === "signin"
+        ? "Signing in..."
+        : "Creating your account...";
 
     try {
-        const result = mode === "signin"
-            ? await supabaseClient.auth.signInWithPassword({
-                email,
-                password
-            })
-            : await supabaseClient.auth.signUp({
-                email,
-                password
-            });
+        const { data, error } = mode === "signin"
+            ? await supabaseClient.auth.signInWithPassword({ email, password })
+            : await supabaseClient.auth.signUp({ email, password });
 
-        if (result.error) throw result.error;
+        if (error) throw error;
 
-        if (result.data.session) {
+        if (data.session) {
+            showSignedInState(data.user);
             authStatus.textContent = "Welcome to NTk3!";
-            showSignedInState(result.data.user);
         } else {
             authStatus.textContent =
                 "Check your email to confirm your account, then sign in.";
@@ -520,18 +497,3 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
         showSignedOutState();
     }
 });
-
-(async () => {
-    const { data, error } = await supabaseClient.auth.getSession();
-
-    if (error) {
-        authStatus.textContent = "Unable to restore your session.";
-        return;
-    }
-
-    if (data.session) {
-        showSignedInState(data.session.user);
-    } else {
-        showSignedOutState();
-    }
-})();
