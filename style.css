@@ -912,3 +912,34 @@ body.light .footer-logo {
         font-size: 24px;
     }
 }
+[hidden] {
+    display: none !important;
+}
+
+.session-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: 900px;
+    margin: 18px auto;
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(21, 28, 46, 0.95);
+}
+
+.session-label {
+    color: var(--muted);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.session-bar button {
+    padding: 9px 13px;
+    border: 1px solid #39466c;
+    border-radius: 8px;
+    background: #242b46;
+    color: #c5ceff;
+    cursor: pointer;
+}
