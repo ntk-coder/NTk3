@@ -211,3 +211,67 @@ body.light .empty-list strong { color: #253250; }
   #appShell, .message-bubble { animation: none !important; }
   .conversation-item, .app-tab, .composer button { transition: none !important; }
 }
+
+
+/* ===== Final contrast and browser-default reset ===== */
+html { color-scheme: dark; }
+body {
+  margin: 0 !important;
+  color: #f2f5ff !important;
+  font-family: "DM Sans", Arial, sans-serif;
+  background-color: #080b13 !important;
+}
+body, body * { box-sizing: border-box; }
+h1, h2, h3, h4, p, label, small, strong, span, li, footer, .auth-heading,
+.auth-heading p, .auth-heading h2, .subtitle, .security-note, .footer-logo {
+  color: inherit;
+}
+h1, h2, h3, h4 { color: #f2f5ff !important; }
+p, .subtitle, .hint, .sidebar-title p, .chat-person p, .chat-empty p,
+.security-note, footer, .control-note, .key-panel p { color: #a8b4d0; }
+label, .find-user-form label, .key-panel label, .result-header label {
+  display: block;
+  color: #aebbe0 !important;
+  font-weight: 700;
+}
+a, a:visited { color: #aebaff; }
+.logo, .logo:visited { color: #f2f5ff !important; text-decoration: none; }
+.logo span, .footer-logo span { color: #9a83ff !important; }
+input, textarea, select {
+  color: #f2f5ff !important;
+  background: rgba(7, 12, 23, .96) !important;
+  border: 1px solid rgba(133, 153, 204, .24) !important;
+  border-radius: 10px;
+}
+input::placeholder, textarea::placeholder { color: #7785a5 !important; opacity: 1; }
+button { font-family: inherit; }
+button:not(.primary-btn):not(.app-tab):not(.search-row button):not(.composer button):not(.account-chip button):not(.mode-btn):not(.icon-btn):not(.key-toggle):not(.copy-btn):not(.clear-btn) {
+  color: #f2f5ff;
+}
+.navbar {
+  color: #f2f5ff !important;
+  background: rgba(8, 11, 19, .96) !important;
+}
+.privacy-status { color: #b9c5e4 !important; }
+.auth-panel, .panel, .studio, .result-card {
+  color: #f2f5ff !important;
+}
+.auth-panel label { margin-top: 13px; }
+.auth-panel input { width: 100%; min-height: 44px; padding: 11px 13px; }
+.auth-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.primary-btn, .secondary-btn, .mode-btn, .icon-btn, .key-toggle, .copy-btn, .clear-btn {
+  cursor: pointer;
+}
+.secondary-btn, .mode-btn, .key-toggle, .copy-btn, .clear-btn {
+  color: #e7ebff !important;
+  background: rgba(28, 37, 61, .95) !important;
+  border: 1px solid rgba(133, 153, 204, .24) !important;
+  border-radius: 10px;
+}
+#authStatus, #findUserStatus, #chatStatus, #statusMessage { color: #a8b4d0; }
+#authStatus.error, .chat-footnote.error, .decrypt-error { color: #ff9caa !important; }
+footer { color: #a8b4d0 !important; }
+@media (max-width: 760px) {
+  .auth-panel { padding: 22px !important; }
+  .app-welcome h1 { color: #f2f5ff !important; }
+}
