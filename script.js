@@ -100,13 +100,24 @@ $("findUserForm").addEventListener("submit", async (event) => {
 });
 function renderConversations() {
   const list = $("conversationList"); list.replaceChildren(); $("conversationCount").textContent = String(conversations.size);
-  if (!conversations.size) { list.innerHTML = '<div class="empty-list">No conversations yet.<br>Start one using an email above.</div>'; return; }
-  for (const partner of conversations.values()) {
+  if (!conversations.size) { list.innerHTML = '<div class="empty-list"><span class="empty-list-icon">✦</span><strong>Your inbox is quiet</strong><br>Start a conversation using an email above.</div>'; return; }
+  const filter = ($("conversationFilter")?.value || "").trim().toLowerCase();
+  const visiblePartners = [...conversations.values()].filter(partner => (partner.email || "").toLowerCase().includes(filter));
+  if (!visiblePartners.length) { list.innerHTML = '<div class="empty-list">No matches found.</div>'; return; }
+  for (const partner of visiblePartners) {
     const button = document.createElement("button"); button.type = "button"; button.className = "conversation-item" + (activePartner?.id === partner.id ? " selected" : "");
     const avatar = document.createElement("span"); avatar.className = "avatar small"; avatar.textContent = (partner.email || "N").slice(0, 1).toUpperCase();
     const info = document.createElement("span"); info.className = "conversation-info"; const title = document.createElement("strong"); title.textContent = partner.email; const sub = document.createElement("small"); sub.textContent = "Private conversation"; info.append(title, sub); button.append(avatar, info); button.addEventListener("click", () => openConversation(partner)); list.append(button);
   }
 }
+$("conversationFilter").addEventListener("input", renderConversations);
+$("toggleChatPassphrase").addEventListener("click", () => {
+  const input = $("chatPassphrase");
+  const show = input.type === "password";
+  input.type = show ? "text" : "password";
+  $("toggleChatPassphrase").textContent = show ? "Hide" : "Show";
+  $("toggleChatPassphrase").setAttribute("aria-label", show ? "Hide shared passphrase" : "Show shared passphrase");
+});
 function openConversation(partner) {
   activePartner = partner; $("chatEmpty").hidden = true; $("activeChat").hidden = false;
   $("chatPersonName").textContent = partner.email.split("@")[0] || "NTk3 user"; $("chatPersonEmail").textContent = partner.email; $("chatAvatar").textContent = partner.email.slice(0, 1).toUpperCase();

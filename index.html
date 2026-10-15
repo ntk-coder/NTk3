@@ -22,19 +22,20 @@
 
     <section id="appShell" hidden>
       <div class="app-welcome"><div><p class="eyebrow">YOUR SPACE. YOUR WORDS.</p><h1>Private conversations<span class="period">.</span></h1><p class="subtitle">Send messages protected by browser-side encryption.</p></div><div class="account-chip"><span class="status-dot"></span><span id="signedInEmail"></span><button id="signOutBtn" type="button">Sign out</button></div></div>
-      <div class="app-tabs" role="tablist"><button class="app-tab active" id="chatTab" type="button">Messages</button><button class="app-tab" id="toolsTab" type="button">Encryption tools</button></div>
+      <div class="app-tabs" role="tablist" aria-label="NTk3 sections"><button class="app-tab active" id="chatTab" type="button"><span aria-hidden="true">✉</span> Messages</button><button class="app-tab" id="toolsTab" type="button"><span aria-hidden="true">⬡</span> Encryption tools</button><span class="tabs-note">PRIVATE BY DESIGN</span></div>
 
       <section id="chatView" class="chat-layout panel">
         <aside class="conversation-sidebar">
           <div class="sidebar-title"><div><h2>Messages</h2><p>Your conversations</p></div><span class="sidebar-count" id="conversationCount">0</span></div>
           <form id="findUserForm" class="find-user-form"><label for="recipientEmail">START A CHAT</label><div class="search-row"><input type="email" id="recipientEmail" placeholder="person@example.com" required><button type="submit" aria-label="Find user">+</button></div><p class="hint" id="findUserStatus">Enter the exact email used for their NTk3 account.</p></form>
+          <div class="conversation-filter"><span aria-hidden="true">⌕</span><input id="conversationFilter" type="search" placeholder="Search conversations" aria-label="Search conversations"></div>
           <div class="conversation-list" id="conversationList"><div class="empty-list">No conversations yet.<br>Start one using an email above.</div></div>
         </aside>
         <section class="conversation-pane" aria-label="Conversation">
           <div class="chat-empty" id="chatEmpty"><div class="empty-symbol">✦</div><h2>Your space to talk.</h2><p>Choose a conversation or start a new one.</p></div>
           <div id="activeChat" hidden>
             <header class="chat-header"><div class="avatar" id="chatAvatar">N</div><div class="chat-person"><h2 id="chatPersonName">Conversation</h2><p id="chatPersonEmail"></p></div><span class="encrypted-badge">● Encrypted locally</span></header>
-            <div class="key-panel"><label for="chatPassphrase">SHARED CHAT PASSPHRASE</label><input type="password" id="chatPassphrase" autocomplete="off" maxlength="256" placeholder="Both people must use the same passphrase"><p>Share this passphrase separately. NTk3 does not send it to the server.</p></div>
+            <div class="key-panel"><label for="chatPassphrase">SHARED CHAT PASSPHRASE</label><div class="chat-key-row"><input type="password" id="chatPassphrase" autocomplete="off" maxlength="256" placeholder="Both people use the same passphrase"><button type="button" id="toggleChatPassphrase" class="key-toggle" aria-label="Show shared passphrase">Show</button></div><p>Share this passphrase separately. NTk3 never uploads it.</p></div>
             <div class="messages-area" id="messagesArea" aria-live="polite"><div class="empty-messages">Messages will appear here.</div></div>
             <form class="composer" id="sendMessageForm"><textarea id="chatMessageInput" rows="1" maxlength="5000" placeholder="Write a message…" required></textarea><button type="submit" id="sendMessageBtn">Send <span>↗</span></button></form>
             <div class="chat-footnote" id="chatStatus" role="status" aria-live="polite">Messages are encrypted in this browser before upload.</div>
