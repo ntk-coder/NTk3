@@ -406,10 +406,6 @@ document.getElementById("signInBtn").addEventListener("click", async () => {
 
 // NTk3 — Authentication and session manager
 
-const authEmail = document.getElementById("authEmail");
-const authPassword = document.getElementById("authPassword");
-const authStatus = document.getElementById("authStatus");
-const authPanel = document.getElementById("authPanel");
 
 const appContainer = document.querySelector("main.container");
 const signInButton = document.getElementById("signInBtn");
