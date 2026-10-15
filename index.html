@@ -1,201 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#080b12">
-    <title>NTk3 — Private Communication</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="./manifest.json">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b12"><title>NTk3 — Private Communication</title>
+  <link rel="stylesheet" href="style.css"><link rel="manifest" href="./manifest.json">
 </head>
 <body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="navbar">
+    <a class="logo" href="#">NTk<span>3</span></a>
+    <div class="nav-right"><div class="privacy-status"><span class="status-dot"></span> PRIVATE SPACE</div><button class="icon-btn" id="themeBtn" aria-label="Toggle theme">☼</button></div>
+  </header>
+  <main class="container">
+    <section class="auth-panel panel" id="authPanel">
+      <div class="auth-heading"><div class="auth-brand-icon">NTk3</div><h2>Welcome to <span>NTk3</span></h2><p>Your private space.<br>Sign in to continue.</p></div>
+      <label for="authEmail">EMAIL ADDRESS</label><input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
+      <label for="authPassword">PASSWORD</label><input type="password" id="authPassword" placeholder="Enter your password" autocomplete="current-password">
+      <div class="auth-actions"><button class="primary-btn" id="signInBtn">Sign In</button><button class="secondary-btn" id="signUpBtn">Create Account</button></div>
+      <p id="authStatus" role="status" aria-live="polite"></p>
+    </section>
 
-    <div class="ambient ambient-one"></div>
-    <div class="ambient ambient-two"></div>
+    <section id="appShell" hidden>
+      <div class="app-welcome"><div><p class="eyebrow">YOUR SPACE. YOUR WORDS.</p><h1>Private conversations<span class="period">.</span></h1><p class="subtitle">Send messages protected by browser-side encryption.</p></div><div class="account-chip"><span class="status-dot"></span><span id="signedInEmail"></span><button id="signOutBtn" type="button">Sign out</button></div></div>
+      <div class="app-tabs" role="tablist"><button class="app-tab active" id="chatTab" type="button">Messages</button><button class="app-tab" id="toolsTab" type="button">Encryption tools</button></div>
 
-    <header class="navbar">
-        <a class="logo" href="#">NTk<span>3</span></a>
-
-        <div class="nav-right">
-            <div class="privacy-status">
-                <span class="status-dot"></span>
-                PRIVATE MODE
-            </div>
-            <button class="icon-btn" id="themeBtn" aria-label="Toggle theme">☼</button>
-        </div>
-    </header>
-
-    <main class="container">
-
-        <section class="hero">
-            <p class="eyebrow">YOUR SPACE. YOUR WORDS.</p>
-            <h1>Speak freely<span class="period">.</span><br>
-                <span class="gradient-text">Stay private.</span>
-            </h1>
-            <p class="subtitle">
-                A private space for messages protected by encryption.
-            </p>
+      <section id="chatView" class="chat-layout panel">
+        <aside class="conversation-sidebar">
+          <div class="sidebar-title"><div><h2>Messages</h2><p>Your conversations</p></div><span class="sidebar-count" id="conversationCount">0</span></div>
+          <form id="findUserForm" class="find-user-form"><label for="recipientEmail">START A CHAT</label><div class="search-row"><input type="email" id="recipientEmail" placeholder="person@example.com" required><button type="submit" aria-label="Find user">+</button></div><p class="hint" id="findUserStatus">Enter the exact email used for their NTk3 account.</p></form>
+          <div class="conversation-list" id="conversationList"><div class="empty-list">No conversations yet.<br>Start one using an email above.</div></div>
+        </aside>
+        <section class="conversation-pane" aria-label="Conversation">
+          <div class="chat-empty" id="chatEmpty"><div class="empty-symbol">✦</div><h2>Your space to talk.</h2><p>Choose a conversation or start a new one.</p></div>
+          <div id="activeChat" hidden>
+            <header class="chat-header"><div class="avatar" id="chatAvatar">N</div><div class="chat-person"><h2 id="chatPersonName">Conversation</h2><p id="chatPersonEmail"></p></div><span class="encrypted-badge">● Encrypted locally</span></header>
+            <div class="key-panel"><label for="chatPassphrase">SHARED CHAT PASSPHRASE</label><input type="password" id="chatPassphrase" autocomplete="off" maxlength="256" placeholder="Both people must use the same passphrase"><p>Share this passphrase separately. NTk3 does not send it to the server.</p></div>
+            <div class="messages-area" id="messagesArea" aria-live="polite"><div class="empty-messages">Messages will appear here.</div></div>
+            <form class="composer" id="sendMessageForm"><textarea id="chatMessageInput" rows="1" maxlength="5000" placeholder="Write a message…" required></textarea><button type="submit" id="sendMessageBtn">Send <span>↗</span></button></form>
+            <div class="chat-footnote" id="chatStatus" role="status" aria-live="polite">Messages are encrypted in this browser before upload.</div>
+          </div>
         </section>
+      </section>
 
-        <section class="studio panel">
-
-            <div class="studio-header">
-                <div class="studio-title">
-                    <div class="lock-icon">♙</div>
-                    <div>
-                        <h2>Message Studio</h2>
-                        <p>Encrypt or decrypt a message</p>
-                    </div>
-                </div>
-
-                <div class="mode-switch">
-                    <button class="mode-btn active" id="encryptMode">
-                        ♙ &nbsp; Encrypt
-                    </button>
-                    <button class="mode-btn" id="decryptMode">
-                        ◉ &nbsp; Decrypt
-                    </button>
-                </div>
-            </div>
-
-            <div class="editor-grid">
-
-                <div class="field">
-                    <div class="label-row">
-                        <label for="message">YOUR MESSAGE</label>
-                        <span class="counter" id="charCount">0 / 5000</span>
-                    </div>
-
-                    <textarea
-                        id="message"
-                        maxlength="5000"
-                        placeholder="Write your message here..."
-                        spellcheck="false"
-                    ></textarea>
-                </div>
-
-                <div class="controls">
-                    <label for="passphrase">SECRET PASSPHRASE</label>
-
-                    <div class="password-wrap">
-                        <span class="field-icon">♙</span>
-                        <input
-                            type="password"
-                            id="passphrase"
-                            placeholder="Enter your shared passphrase"
-                            autocomplete="off"
-                            maxlength="256"
-                        >
-                        <button class="eye-btn" id="togglePassword"
-                                aria-label="Show passphrase">◉</button>
-                    </div>
-
-                    <button class="primary-btn" id="actionBtn">
-                        <span id="actionIcon">♙</span>
-                        <span id="actionText">Encrypt Message</span>
-                        <span class="arrow">→</span>
-                    </button>
-
-                    <p class="control-note">
-                        Your passphrase never needs to accompany your message.
-                    </p>
-                </div>
-
-            </div>
-        </section>
-
-        <section class="result-card panel">
-            <div class="result-header">
-                <label for="result">RESULT</label>
-                <button class="copy-btn" id="copyBtn">▢ &nbsp; Copy</button>
-            </div>
-
-            <textarea
-                id="result"
-                placeholder="Your encrypted or decrypted message will appear here..."
-                spellcheck="false"
-            ></textarea>
-
-            <div class="result-footer">
-                <span id="statusMessage" role="status" aria-live="polite">
-                    Ready when you are.
-                </span>
-                <button class="clear-btn" id="clearBtn">Clear</button>
-            </div>
-        </section>
-
-        <section class="features">
-
-            <article class="feature-card panel">
-                <div class="feature-icon">⬡</div>
-                <div>
-                    <h3>Strong Encryption</h3>
-                    <p>AES-GCM encryption protects your message contents.</p>
-                </div>
-            </article>
-
-            <article class="feature-card panel">
-                <div class="feature-icon">◈</div>
-                <div>
-                    <h3>Local Processing</h3>
-                    <p>Messages are processed in your browser, not our server.</p>
-                </div>
-            </article>
-
-            <article class="feature-card panel">
-                <div class="feature-icon">ϟ</div>
-                <div>
-                    <h3>Simple Sharing</h3>
-                    <p>Exchange encrypted messages through your preferred platform.</p>
-                </div>
-            </article>
-
-        </section>
-
-        <div class="security-note">
-            <span class="note-dot"></span>
-            Encryption happens in your browser. Keep your passphrase private.
-        </div>
-
-    </main>
-<!-- NTk3 Authentication -->
-<section class="auth-panel panel" id="authPanel">
-   <div class="auth-heading">
-    <div class="auth-brand-icon">NTk3</div>
-
-    <h2>Welcome to <span>NTk3</span></h2>
-
-    <p>Your private space.<br>Sign in to continue.</p>
-    <label for="authEmail">EMAIL ADDRESS</label>
-    <input
-        type="email"
-        id="authEmail"
-        placeholder="you@example.com"
-        autocomplete="email"
-    >
-
-    <label for="authPassword">PASSWORD</label>
-    <input
-        type="password"
-        id="authPassword"
-        placeholder="Enter your password"
-        autocomplete="current-password"
-    >
-
-    <div class="auth-actions">
-        <button class="primary-btn" id="signInBtn">Sign In</button>
-        <button class="secondary-btn" id="signUpBtn">Create Account</button>
-    </div>
-
-    <p id="authStatus" role="status" aria-live="polite"></p>
-</section>
-    <footer>
-        <span class="footer-logo">NTk<span>3</span></span>
-        <span class="footer-divider">•</span>
-        Private communication, simplified.
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
-</body>
-</html>
+      <section id="toolsView" class="tools-view" hidden>
+        <section class="hero"><p class="eyebrow">YOUR SPACE. YOUR WORDS.</p><h1>Speak freely<span class="period">.</span><br><span class="gradient-text">Stay private.</span></h1><p class="subtitle">Encrypt or decrypt a message locally.</p></section>
+        <section class="studio panel"><div class="studio-header"><div class="studio-title"><div class="lock-icon">♙</div><div><h2>Message Studio</h2><p>Encrypt or decrypt a message</p></div></div><div class="mode-switch"><button class="mode-btn active" id="encryptMode" type="button">♙ &nbsp; Encrypt</button><button class="mode-btn" id="decryptMode" type="button">◉ &nbsp; Decrypt</button></div></div>
+          <div class="editor-grid"><div class="field"><div class="label-row"><label for="message">YOUR MESSAGE</label><span class="counter" id="charCount">0 / 5000</span></div><textarea id="message" maxlength="5000" placeholder="Write your message here…" spellcheck="false"></textarea></div><div class="controls"><label for="passphrase">SECRET PASSPHRASE</label><div class="password-wrap"><span class="field-icon">♙</span><input type="password" id="passphrase" placeholder="Enter a passphrase" autocomplete="off" maxlength="256"><button class="eye-btn" id="togglePassword" type="button" aria-label="Show passphrase">◉</button></div><button class="primary-btn" id="actionBtn" type="button"><span id="actionIcon">♙</span><span id="actionText">Encrypt Message</span><span class="arrow">→</span></button><p class="control-note">Keep your passphrase private.</p></div></div>
+        </section><section class="result-card panel"><div class="result-header"><label for="result">RESULT</label><button class="copy-btn" id="copyBtn" type="button">▢ &nbsp; Copy</button></div><textarea id="result" placeholder="Your result appears here…" spellcheck="false"></textarea><div class="result-footer"><span id="statusMessage" role="status" aria-live="polite">Ready when you are.</span><button class="clear-btn" id="clearBtn" type="button">Clear</button></div></section>
+      </section>
+      <p class="security-note"><span class="note-dot"></span>Use a strong, shared passphrase and share it through a separate channel.</p>
+    </section>
+  </main>
+  <footer><span class="footer-logo">NTk<span>3</span></span><span class="footer-divider">•</span>Private communication, simplified.</footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="script.js"></script>
+</body></html>
